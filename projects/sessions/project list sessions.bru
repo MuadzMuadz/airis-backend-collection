@@ -1,0 +1,43 @@
+meta {
+  name: project list sessions
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/chats
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    data.forEach((session) => {
+      // Ambil title dari response session [cite: 2]
+      const title = session.title;
+      const sId = session.id;
+  
+      if (title && sId) {
+        const cleanTitle = title
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '_')
+          .replace(/[^\w.-]+/g, '');
+  
+        // Nama Variabel: chat_siapa_karakter_marvel_...
+        _ = bru.setEnvVar(`chat_${cleanTitle}`, sId);
+      }
+    });
+    console.log(`Berhasil generate ${data.length} variabel chat session.`);
+  }
+}

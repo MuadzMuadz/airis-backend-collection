@@ -1,0 +1,40 @@
+meta {
+  name: llm status check
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/status
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+
+body:json {
+  {
+    "name": "project 1",
+    "description": "test"
+  }
+}
+
+body:multipart-form {
+  name: project_1
+  description: tset
+  ~username: john.2@example.com
+  ~password: securepassword123
+}
+
+
+auth:bearer {
+  token: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

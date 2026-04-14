@@ -1,0 +1,19 @@
+meta {
+  name: Global Search
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/
+  body: none
+  auth: bearer
+}
+
+params:query {
+  q:
+}
+
+auth:bearer {
+  token: {{token}}
+}

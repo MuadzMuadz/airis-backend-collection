@@ -1,0 +1,26 @@
+meta {
+  name: get status
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/v1/status/
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+{
+    "name": "project 1",
+    "description": "test"
+  }
+}

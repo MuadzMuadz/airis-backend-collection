@@ -1,0 +1,49 @@
+meta {
+  name: create message SSE
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/general-chat/messages/sse/create_message
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:multipart-form {
+  content: kalo di bandingin dengan indonesia gimanas ethiopia ?
+  source_type: auto
+  model_type: normal
+  project_id: 
+  session_id: {{session_gimana_kekuaran_angkatan_darat_ethiopia}}
+  ~session_id: 
+  ~files: 
+  ~project_id: {{project_project_alpha}}
+}
+
+script:post-response {
+  const body = res.getBody();
+  
+  if (body && typeof body === 'string') {
+    // Regex untuk mencari session_id dalam stream SSE
+    const sessionIdMatch = body.match(/"session_id":\s*"([^"]+)"/g);
+    
+    if (sessionIdMatch) {
+      // Kita ambil match terakhir karena event 'final' (paling akhir) 
+      // pasti mengirimkan session_id, baik session baru maupun lama.
+      const lastMatch = sessionIdMatch[sessionIdMatch.length - 1];
+      const sessionId = lastMatch.match(/"session_id":\s*"([^"]+)"/)[1];
+      
+      _ = bru.setEnvVar("session_id", sessionId);
+      console.log(`Captured session_id from final event: ${sessionId}`);
+    }
+  }
+}

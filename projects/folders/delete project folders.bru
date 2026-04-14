@@ -1,0 +1,37 @@
+meta {
+  name: delete project folders
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/folders/{{folder_id}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  if (res.getStatus() === 204 || res.getStatus() === 200) {
+    const data = res.getBody();
+    
+    // 1. Hapus variable default
+    _ = bru.deleteEnvVar("folder_id");
+    
+    // 2. Hapus variable dynamic folder_$name jika ada di response
+    if (data && data.name) {
+      const cleanName = data.name.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+      _ = bru.deleteEnvVar(`folder_${cleanName}`);
+      console.log(`Deleted folder_${cleanName} and folder_id`);
+    } else {
+      console.log("Deleted folder_id. Dynamic name not found in response.");
+    }
+  }
+}

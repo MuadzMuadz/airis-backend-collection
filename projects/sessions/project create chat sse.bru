@@ -1,0 +1,44 @@
+meta {
+  name: project create chat sse
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/chats/sse
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "content": "Discuss this paper",
+  "session_id": "{{project_session_id}}",
+  "dois": ["doi-1", "doi-2"]
+}
+
+script:post-response {
+  const body = res.getBody();
+  
+  if (body && typeof body === 'string') {
+    // Regex untuk mencari session_id dalam stream SSE
+    const sessionIdMatch = body.match(/"session_id":\s*"([^"]+)"/g);
+    
+    if (sessionIdMatch) {
+      // Kita ambil match terakhir karena event 'final' (paling akhir) 
+      // pasti mengirimkan session_id, baik session baru maupun lama.
+      const lastMatch = sessionIdMatch[sessionIdMatch.length - 1];
+      const sessionId = lastMatch.match(/"session_id":\s*"([^"]+)"/)[1];
+      
+      _ = bru.setEnvVar("project_session_id", sessionId);
+      console.log(`Captured project_session_id from final event: ${sessionId}`);
+    }
+  }
+}

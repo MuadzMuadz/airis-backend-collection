@@ -1,0 +1,29 @@
+meta {
+  name: read session by id
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/general-chat/sessions/{{session_id_2}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && data.id && data.title) {
+    const cleanTitle = data.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    _ = bru.setEnvVar(`session_${cleanTitle}`, data.id);
+    console.log(`Session read: session_${cleanTitle}`);
+  }
+}

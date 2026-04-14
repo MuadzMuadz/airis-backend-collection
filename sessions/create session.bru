@@ -1,0 +1,36 @@
+meta {
+  name: create session
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/general-chat/sessions/
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "title": "My New Session"
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && data.id) {
+    const title = data.title || "new_session";
+    const cleanTitle = title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    
+    _ = bru.setEnvVar(`session_${cleanTitle}`, data.id);
+    _ = bru.setEnvVar("session_id", data.id);
+    console.log(`Session created: session_${cleanTitle} = ${data.id}`);
+  }
+}

@@ -1,0 +1,37 @@
+meta {
+  name: get project reference copy
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/references?folder_id=307dc016-28e8-4129-90a8-1d6599ecec58
+  body: none
+  auth: bearer
+}
+
+params:query {
+  folder_id: 307dc016-28e8-4129-90a8-1d6599ecec58
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    data.forEach((ref) => {
+      if (ref.title && ref.id) {
+        const cleanTitle = ref.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+        _ = bru.setEnvVar(`ref_${cleanTitle}`, ref.id);
+      }
+    });
+    console.log(`Generated variables for ${data.length} references.`);
+  }
+}

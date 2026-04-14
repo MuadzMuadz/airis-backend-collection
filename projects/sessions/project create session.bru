@@ -1,0 +1,48 @@
+meta {
+  name: project create session
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{active_project_id}}/sessions
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "project_id": "{{active_project_id}}",
+  "title": "Project Chat"
+}
+
+script:post-response {
+  const data = res.getBody();
+  const reqBody = req.getBody();
+  
+  if (data && data.id) {
+    // Ambil title dari request, kalau gak ada kasih default 'new_chat'
+    const title = reqBody.title || "new_chat";
+    
+    const cleanTitle = title
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '_')
+      .replace(/[^\w.-]+/g, '');
+  
+    // Simpen jadi variabel: chat_nama_chat_baru
+    _ = bru.setEnvVar(`chat_${cleanTitle}`, data.id);
+    
+    // (Opsional) Langsung set jadi session aktif buat dipake di SSE/Chat
+    _ = bru.setEnvVar("active_session_id", data.id);
+    
+    console.log(`Session Baru Terdaftar: chat_${cleanTitle}`);
+  }
+}

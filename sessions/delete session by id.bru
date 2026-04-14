@@ -1,0 +1,37 @@
+meta {
+  name: delete session by id
+  type: http
+  seq: 1
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/general-chat/sessions/{{session_id}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  if (res.getStatus() === 204 || res.getStatus() === 200) {
+    const data = res.getBody();
+    
+    // 1. Hapus variable default session_id
+    _ = bru.deleteEnvVar("session_id");
+    
+    // 2. Hapus variable dynamic session_$title jika title ada di response
+    if (data && data.title) {
+        const cleanTitle = data.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+        _ = bru.deleteEnvVar(`session_${cleanTitle}`);
+        console.log(`Deleted variables: session_id and session_${cleanTitle}`);
+    } else {
+        console.log("Deleted session_id. Title not found in response for dynamic variable deletion.");
+    }
+  }
+}

@@ -1,0 +1,59 @@
+meta {
+  name: project research
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/research
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "topic": "downy milldew pada tanaman anggur",
+    "max_results": 20
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    console.log("--- Research Results Saved (DOI Only) ---");
+    data.forEach((item) => {
+      // Skip kalau ngga ada DOI
+      if (!item.doi) return;
+      
+      // Bersihkan nama variable biar aman di Bruno (replace / dan . jadi _)
+      const cleanVarName = item.doi.toLowerCase().trim().replace(/[\/\.\s]+/g, '_').replace(/[^\w-]+/g, '');
+      
+      // Filter data sesuai schema ProjectReferenceCreate
+      const referenceData = {
+        title: item.title || "Untitled",
+        author: item.author || "Unknown",
+        publication_date: item.publication_date,
+        doi: item.doi,
+        abstract: item.abstract,
+        url: item.url,
+        type: (item.meta_data && item.meta_data.type) || "article"
+      };
+      
+      // Simpan sebagai string JSON
+      _ = bru.setEnvVar(cleanVarName, JSON.stringify(referenceData, null, 2));
+      
+      console.log(`Variable: {{${cleanVarName}}} | Title: ${item.title}`);
+    });
+    console.log("------------------------------------------");
+    console.log("Cara Pakai: Di request 'add reference', isi body dengan {{doi_yang_muncul_di_atas}}");
+  }
+}

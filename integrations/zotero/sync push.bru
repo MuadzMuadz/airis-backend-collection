@@ -1,0 +1,21 @@
+meta {
+  name: Sync Push
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/integrations/zotero/sync/push
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "project_reference_ids": []
+  }
+}

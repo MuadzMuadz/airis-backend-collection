@@ -1,0 +1,11 @@
+meta {
+  name: Get Library Session
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/projects/{{project_test_3}}/library/sessions/{{se}}
+  body: none
+  auth: inherit
+}

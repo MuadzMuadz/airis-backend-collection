@@ -1,0 +1,33 @@
+meta {
+  name: get session
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/general-chat/sessions/
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    data.forEach((session) => {
+      if (session.title && session.id) {
+        const cleanTitle = session.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+        _ = bru.setEnvVar(`session_${cleanTitle}`, session.id);
+      }
+    });
+    console.log(`Generated variables for ${data.length} sessions.`);
+  }
+}

@@ -1,0 +1,39 @@
+meta {
+  name: first session
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/general-chat/sessions/first-chat-session
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && data.id) {
+    const title = data.title || "first_session";
+    const cleanTitle = title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    
+    _ = bru.setEnvVar(`session_${cleanTitle}`, data.id);
+    _ = bru.setEnvVar("session_id", data.id);
+    console.log(`First session created: session_${cleanTitle} = ${data.id}`);
+  }
+}

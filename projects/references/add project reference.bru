@@ -1,0 +1,46 @@
+meta {
+  name: add project reference
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/references
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Fast Model Predictive Control Combining Offline Method and Online Optimization with K-D Tree",
+    "authors": ["Yi Ding","Zuhua Xu","Jun Zhao","Zhijiang Shao"],
+    "publication_date": "2015",
+    "doi": "10.1155/2015/982041",
+    "abstract": "Computation time is the main factor that limits the application of model predictive control (MPC).\nThis paper presents a fast model predictive control algorithm that combines offline method and online optimization to solve the MPC problem.\nThe offline method uses a k-d tree instead of a table to implement partial enumeration, which accelerates online searching operation.\nOnly a part of the explicit solution is stored in the k-d tree for online searching, and the k-d tree is updated in runtime to accommodate the change in the operating point.\nOnline optimization is invoked when searching on the k-d tree fails.\nNumerical experiments show that the proposed algorithm is efficient on both small-scale and large-scale processes.\nThe average speedup factor in the large-scale process is at least 6, the worst-case speedup factor is at least 2, and the performance is less than 0.05% suboptimal.",
+    "url": "https://doi.org/10.1155/2015/982041",
+    "type": "journal-article",
+    "project_id": "{{project_project_alpha}}"
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  const reqBody = req.getBody();
+  
+  if (data && data.id) {
+    const title = reqBody.title || "new_reference";
+    const cleanTitle = title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    
+    _ = bru.setEnvVar(`ref_${cleanTitle}`, data.id);
+    _ = bru.setEnvVar("ref_id", data.id);
+    console.log(`Reference added: ref_${cleanTitle} = ${data.id}`);
+  }
+}

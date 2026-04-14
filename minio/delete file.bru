@@ -1,0 +1,26 @@
+meta {
+  name: delete file
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/minio/delete/{{filename}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+{
+    "name": "project 1",
+    "description": "test"
+  }
+}

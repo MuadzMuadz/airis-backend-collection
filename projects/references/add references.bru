@@ -1,0 +1,44 @@
+meta {
+  name: add references
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/references/bulk
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  // Panduan Format Data Bulk:
+  // {
+  //   "references": [
+  //     { "title": "...", "doi": "...", "author": "...", ... },
+  //     { "title": "...", "doi": "...", "author": "...", ... }
+  //   ]
+  // }
+  {{selected_references_bulk_json}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    data.forEach((ref) => {
+      if (ref.title && ref.id) {
+        const cleanTitle = ref.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+        _ = bru.setEnvVar(`ref_${cleanTitle}`, ref.id);
+      }
+    });
+    console.log(`Added and generated variables for ${data.length} references.`);
+  }
+}

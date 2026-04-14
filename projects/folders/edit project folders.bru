@@ -1,0 +1,33 @@
+meta {
+  name: edit project folders
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/folders/{{folder_id}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "name": "Updated Folder Name"
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && data.id && data.name) {
+    const cleanName = data.name.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    _ = bru.setEnvVar(`folder_${cleanName}`, data.id);
+    console.log(`Folder updated: folder_${cleanName}`);
+  }
+}

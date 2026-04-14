@@ -1,0 +1,37 @@
+meta {
+  name: project delete session
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/sessions/{{session_carikan_yagn_fokusnya_pake_yolo}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  if (res.getStatus() === 204 || res.getStatus() === 200) {
+    const data = res.getBody();
+    
+    // 1. Hapus variable default
+    _ = bru.deleteEnvVar("project_session_id");
+    
+    // 2. Hapus variable dynamic chat_$title jika ada di response
+    if (data && data.title) {
+        const cleanTitle = data.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+        _ = bru.deleteEnvVar(`chat_${cleanTitle}`);
+        console.log(`Deleted chat_${cleanTitle} and project_session_id`);
+    } else {
+        console.log("Deleted project_session_id. Title not found in response.");
+    }
+  }
+}

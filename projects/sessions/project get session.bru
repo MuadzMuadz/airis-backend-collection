@@ -1,0 +1,40 @@
+meta {
+  name: project get session
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/sessions/{{session_implementasi_ml_deteksi_penyakit_anggur}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    // Capture up to 5 sessions
+    data.slice(0, 5).forEach((session, index) => {
+      if (session.id) {
+        _ = bru.setEnvVar(`project_session_id_${index + 1}`, session.id);
+      }
+    });
+  
+    // Default to the first one if available
+    if (data.length > 0 && data[0].id) {
+      _ = bru.setEnvVar("project_session_id", data[0].id);
+    }
+  } else if (data && data.id) {
+    // Handle single object response
+    _ = bru.setEnvVar("project_session_id", data.id);
+  }
+}

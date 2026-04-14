@@ -1,0 +1,33 @@
+meta {
+  name: project update session
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/sessions/{{project_session_id}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "title": "Updated Title"
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && data.id && data.title) {
+    const cleanTitle = data.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    _ = bru.setEnvVar(`chat_${cleanTitle}`, data.id);
+    console.log(`Session updated: chat_${cleanTitle}`);
+  }
+}

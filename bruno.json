@@ -1,0 +1,13 @@
+{
+  "version": "1",
+  "name": "Airis-backend",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "http://10.83.81.108:5000"
+  }
+}

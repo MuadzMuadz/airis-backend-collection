@@ -1,0 +1,17 @@
+meta {
+  name: Discuss Papers (Auto Session) SSE
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_test_3}}/library/chats
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  content: jelasin isi paper ini
+  dois: ["10.30742/axial.v13i2.4679"]
+  session_id: 
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Discuss Papers SSE
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/library/chats
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  content: tolong bahas paper ini
+  dois: ["10.62311/nesx/905766", "10.1155/2015/982041"]
+}

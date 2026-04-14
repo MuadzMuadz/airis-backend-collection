@@ -1,0 +1,50 @@
+meta {
+  name: create project
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+  "name": "Project Alpha",
+  "description": "A research project"
+  }
+}
+
+script:post-response {
+  const data = res.getBody();
+  const reqBody = req.getBody(); // Ngambil data yang lu kirim tadi
+  
+  if (data && data.id) {
+    // Ambil title dari body request yang baru lu kirim
+    const title = reqBody.name || "new_project";
+    
+    const cleanTitle = title
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '_')
+      .replace(/[^\w.-]+/g, '');
+  
+    // Simpen jadi variabel: project_nama_baru
+    _ = bru.setEnvVar(`project_${cleanTitle}`, data.id);
+    
+    // (Opsional) Langsung set jadi project aktif
+    _ = bru.setEnvVar("active_project_id", data.id);
+    
+    console.log(`Project Baru Terdaftar: project_${cleanTitle}`);
+  }
+}

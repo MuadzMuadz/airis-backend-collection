@@ -1,0 +1,27 @@
+meta {
+  name: ingesting reference
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/references/ingest
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Analisis Hama pada Tanaman Anggur dengan Pendekatan Metode CF (Certainty Factor) Berbasis Mobile Android",
+    "url": "https://doi.org/10.30742/axial.v13i2.4679",
+    "doi": "10.30742/axial.v13i2.4679"
+  }
+}

@@ -1,0 +1,37 @@
+meta {
+  name: create project folders
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{active_project_id}}/folders
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "name": "New Folder"
+}
+
+script:post-response {
+  const data = res.getBody();
+  const reqBody = req.getBody();
+  
+  if (data && data.id) {
+    const name = reqBody.name || "new_folder";
+    const cleanName = name.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+    
+    _ = bru.setEnvVar(`folder_${cleanName}`, data.id);
+    _ = bru.setEnvVar("folder_id", data.id);
+    console.log(`Folder created: folder_${cleanName} = ${data.id}`);
+  }
+}

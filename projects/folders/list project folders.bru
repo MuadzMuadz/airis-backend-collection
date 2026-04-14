@@ -1,0 +1,33 @@
+meta {
+  name: list project folders
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/folders
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    data.forEach((folder) => {
+      if (folder.name && folder.id) {
+        const cleanName = folder.name.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+        _ = bru.setEnvVar(`folder_${cleanName}`, folder.id);
+      }
+    });
+    console.log(`Generated variables for ${data.length} folders.`);
+  }
+}

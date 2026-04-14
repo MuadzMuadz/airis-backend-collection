@@ -1,0 +1,42 @@
+meta {
+  name: delete references
+  type: http
+  seq: 1
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/references
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "reference_ids": [
+    "uuid-1",
+    "uuid-2"
+  ]
+}
+
+script:post-response {
+  if (res.getStatus() === 204 || res.getStatus() === 200) {
+    const data = res.getBody();
+    
+    if (data && data.deleted_items && Array.isArray(data.deleted_items)) {
+      data.deleted_items.forEach(item => {
+        if (item.title) {
+          const cleanTitle = item.title.toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w.-]+/g, '');
+          _ = bru.deleteEnvVar(`ref_${cleanTitle}`);
+        }
+      });
+      console.log(`Bulk deleted ${data.count} reference variables.`);
+    }
+  }
+}

@@ -1,0 +1,43 @@
+meta {
+  name: get project
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/projects/
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  if (data && Array.isArray(data)) {
+    data.forEach((project) => {
+      // Ambil title/name dan id (sesuaikan key JSON-nya jika berbeda)
+      const title = project.name;
+      const pId = project.id;
+  
+      if (title && pId) {
+        const cleanTitle = title
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '_')
+          .replace(/[^\w.-]+/g, '');
+  
+        // Nama Variabel: project_nama_project_lu
+        _ = bru.setEnvVar(`project_${cleanTitle}`, pId);
+      }
+    });
+    console.log(`Berhasil generate ${data.length} variabel project.`);
+  }
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Create Library Session
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/library/sessions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": ""
+  }
+}

@@ -1,0 +1,23 @@
+meta {
+  name: edit references
+  type: http
+  seq: 1
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/projects/{{project_id}}/references/{{ref_id}}
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  "project_folder_id": "uuid-here"
+}

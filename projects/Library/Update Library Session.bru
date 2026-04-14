@@ -1,0 +1,17 @@
+meta {
+  name: Update Library Session
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/library/sessions/{{session_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": ""
+  }
+}

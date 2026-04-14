@@ -1,0 +1,32 @@
+meta {
+  name: list models copy
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://10.83.81.54:4000/models
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: sk-ZvPatvQWYIvA-CbJjy-hlQ
+}
+
+body:multipart-form {
+  ~content: gimana menurut lu lanjutan dari anime trigun steampaade yakni anime trigun stargaze?
+  ~session_id: 
+  ~source_type: auto
+  ~model_type: normal
+  ~files: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

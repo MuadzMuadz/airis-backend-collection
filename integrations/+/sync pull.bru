@@ -1,0 +1,20 @@
+meta {
+  name: Sync Pull
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/integrations/zotero/sync/pull?project_folder_id={{folder_id}}
+  body: none
+  auth: bearer
+}
+
+params:query {
+  project_folder_id: {{folder_id}}
+  ~zotero_collection_key:
+}
+
+auth:bearer {
+  token: {{token}}
+}

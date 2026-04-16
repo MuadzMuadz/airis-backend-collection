@@ -1,7 +1,7 @@
 meta {
   name: Sync Push
   type: http
-  seq: 6
+  seq: 7
 }
 
 post {
@@ -16,6 +16,6 @@ auth:bearer {
 
 body:json {
   {
-    "project_reference_ids": []
+    "project_id": "{{project_id}}"
   }
 }

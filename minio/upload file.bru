@@ -6,7 +6,7 @@ meta {
 
 post {
   url: {{baseUrl}}/api/v1/minio/upload
-  body: json
+  body: multipartForm
   auth: bearer
 }
 
@@ -18,9 +18,9 @@ auth:bearer {
   token: {{token}}
 }
 
-body:json {
-{
-    "name": "project 1",
-    "description": "test"
-  }
+body:multipart-form {
+  file:
+  session_id: {{session_id}}
+  auto_ingest: true
+  ~session_id:
 }

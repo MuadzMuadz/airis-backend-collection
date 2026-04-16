@@ -1,17 +1,13 @@
 meta {
-  name: Global Search
+  name: Check Status
   type: http
-  seq: 10
+  seq: 3
 }
 
 get {
-  url: {{baseUrl}}/api/v1/search/
+  url: {{baseUrl}}/api/v1/integrations/zotero/status
   body: none
   auth: bearer
-}
-
-params:query {
-  q:
 }
 
 auth:bearer {

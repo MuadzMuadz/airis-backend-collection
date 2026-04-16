@@ -5,9 +5,13 @@ meta {
 }
 
 delete {
-  url: {{baseUrl}}/api/v1/minio/delete/{{filename}}
-  body: json
+  url: {{baseUrl}}/api/v1/minio/delete/{{filename}}?session_id={{session_id}}
+  body: none
   auth: bearer
+}
+
+params:query {
+  session_id: {{session_id}}
 }
 
 headers {
@@ -16,11 +20,4 @@ headers {
 
 auth:bearer {
   token: {{token}}
-}
-
-body:json {
-{
-    "name": "project 1",
-    "description": "test"
-  }
 }

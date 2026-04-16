@@ -6,7 +6,7 @@ meta {
 
 get {
   url: {{baseUrl}}/api/v1/minio/list/{{session_id}}
-  body: json
+  body: none
   auth: bearer
 }
 
@@ -16,11 +16,4 @@ headers {
 
 auth:bearer {
   token: {{token}}
-}
-
-body:json {
-{
-    "name": "project 1",
-    "description": "test"
-  }
 }

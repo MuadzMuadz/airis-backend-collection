@@ -1,0 +1,24 @@
+meta {
+  name: OAuth Callback
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/integrations/zotero/callback
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "oauth_token": "",
+    "oauth_token_secret": "{{zotero_oauth_token_secret}}",
+    "external_user_id": "",
+    "username": ""
+  }
+}

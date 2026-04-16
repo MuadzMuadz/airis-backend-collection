@@ -5,13 +5,14 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/api/v1/projects/{{project_project_alpha}}/references?folder_id=307dc016-28e8-4129-90a8-1d6599ecec58
+  url: {{baseUrl}}/api/v1/projects/{{active_project_id}}/references?page=1&page_size=10
   body: none
   auth: bearer
 }
 
 params:query {
-  folder_id: 307dc016-28e8-4129-90a8-1d6599ecec58
+  page: 1
+  page_size: 10
 }
 
 headers {

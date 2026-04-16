@@ -1,7 +1,7 @@
 meta {
   name: Sync Pull
   type: http
-  seq: 5
+  seq: 6
 }
 
 post {
@@ -16,7 +16,7 @@ auth:bearer {
 
 body:json {
   {
-    "project_folder_id": "{{folder_id}}",
-    "zotero_collection_key": ""
+    "zotero_collection_key": "",
+    "target_folder_id": "{{folder_id}}"
   }
 }

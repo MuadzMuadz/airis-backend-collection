@@ -20,5 +20,6 @@ script:post-response {
   if (data && data.oauth_token_secret) {
     bru.setEnvVar("zotero_oauth_token_secret", data.oauth_token_secret);
     console.log("Zotero OAuth Token Secret saved.");
+    console.log("Authorization URL: " + data.authorization_url);
   }
 }

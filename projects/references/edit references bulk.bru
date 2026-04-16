@@ -5,9 +5,13 @@ meta {
 }
 
 patch {
-  url: {{baseUrl}}/api/v1/projects/{{project_id}}/references/bulk
+  url: {{baseUrl}}/api/v1/projects/references/bulk?project_id={{active_project_id}}
   body: json
   auth: bearer
+}
+
+params:query {
+  project_id: {{active_project_id}}
 }
 
 headers {

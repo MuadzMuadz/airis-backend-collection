@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 meta {
   name: OAuth Callback
   type: http
@@ -15,3 +16,22 @@ params:query {
   oauth_verifier:
   oauth_token_secret: {{zotero_oauth_token_secret}}
 }
+=======
+meta {
+  name: OAuth Callback
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/integrations/zotero/callback
+  body: none
+  auth: none
+}
+
+params:query {
+  oauth_token:
+  oauth_verifier:
+  oauth_token_secret: {{zotero_oauth_token_secret}}
+}
+>>>>>>> 5f62cb15a06aedfb8396d5d4df1f4da159fe9c29

@@ -1,11 +1,11 @@
 meta {
-  name: Check Status
+  name: List Collections
   type: http
-  seq: 3
+  seq: 5
 }
 
 get {
-  url: {{baseUrl}}/api/v1/integrations/zotero/status
+  url: {{baseUrl}}/api/v1/integrations/zotero/collections
   body: none
   auth: bearer
 }

@@ -1,0 +1,15 @@
+meta {
+  name: List Collections
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/v1/integrations/zotero/collections
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,20 @@
+meta {
+  name: List Collection Items
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/integrations/zotero/collections/{{zotero_collection_key}}/items?limit=100&start=0
+  body: none
+  auth: bearer
+}
+
+params:query {
+  limit: 100
+  start: 0
+}
+
+auth:bearer {
+  token: {{token}}
+}
